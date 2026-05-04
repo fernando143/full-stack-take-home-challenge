@@ -40,8 +40,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
       message = 'Internal server error';
       code = 'INTERNAL_SERVER_ERROR';
-      this.logger.error(exception);
     }
+
+    this.logger.error(exception);
 
     response.status(statusCode).json({
       statusCode,
