@@ -12,16 +12,14 @@ export class UsersService {
   ) {}
 
   async findOne(email: string): Promise<User | null> {
-    return this.userRepository.findOne({
-      where: { email },
-    });
+    return this.userRepository
+      .findOne({ where: { email } })
+      .catch((err) => this.dbErrorHandler.handleError(err));
   }
 
   async registerOne(email: string, password: string): Promise<void> {
-    try {
-      await this.userRepository.insert({ email, password });
-    } catch (err) {
-      this.dbErrorHandler.handleError(err);
-    }
+    await this.userRepository
+      .insert({ email, password })
+      .catch((err) => this.dbErrorHandler.handleError(err));
   }
 }

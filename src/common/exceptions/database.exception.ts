@@ -1,11 +1,16 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+export enum DatabaseErrorCode {
+  DUPLICATE_ENTRY = 'DUPLICATE_ENTRY',
+  FOREIGN_KEY_VIOLATION = 'FOREIGN_KEY_VIOLATION',
+  NULL_VIOLATION = 'NULL_VIOLATION',
+  DATABASE_ERROR = 'DATABASE_ERROR',
+}
 
-export class DatabaseException extends HttpException {
+export class DatabaseException extends Error {
   constructor(
     message: string,
-    public code: string,
-    status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
+    public readonly code: DatabaseErrorCode,
   ) {
-    super({ message, code, statusCode: status }, status);
+    super(message);
+    this.name = 'DatabaseException';
   }
 }

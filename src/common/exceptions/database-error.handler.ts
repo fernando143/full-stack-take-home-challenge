@@ -1,6 +1,6 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
-import { DatabaseException } from './database.exception';
+import { DatabaseException, DatabaseErrorCode } from './database.exception';
 
 enum PostgresErrorCode {
   UNIQUE_VIOLATION = '23505',
@@ -18,25 +18,29 @@ export class DatabaseErrorHandler {
         case PostgresErrorCode.UNIQUE_VIOLATION:
           throw new DatabaseException(
             'Register already exists',
-            'DUPLICATE_ENTRY',
-            HttpStatus.CONFLICT,
+            DatabaseErrorCode.DUPLICATE_ENTRY,
           );
         case PostgresErrorCode.FOREIGN_KEY_VIOLATION:
           throw new DatabaseException(
             'Invalid reference',
-            'FOREIGN_KEY_VIOLATION',
-            HttpStatus.BAD_REQUEST,
+            DatabaseErrorCode.FOREIGN_KEY_VIOLATION,
           );
         case PostgresErrorCode.NOT_NULL_VIOLATION:
           throw new DatabaseException(
             'Field required',
-            'NULL_VIOLATION',
-            HttpStatus.BAD_REQUEST,
+            DatabaseErrorCode.NULL_VIOLATION,
           );
         default:
-          throw new DatabaseException('Unknown DB error', 'DATABASE_ERROR');
+          throw new DatabaseException(
+            'Unknown database error',
+            DatabaseErrorCode.DATABASE_ERROR,
+          );
       }
     }
-    throw error;
+
+    throw new DatabaseException(
+      'Database operation failed',
+      DatabaseErrorCode.DATABASE_ERROR,
+    );
   }
 }
