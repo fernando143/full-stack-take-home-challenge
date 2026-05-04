@@ -183,3 +183,107 @@ To run a specific spec file:
 npm test -- auth.controller
 npm test -- notifications.service
 ```
+
+---
+
+## 5. API examples (curl)
+
+Base URL: `https://full-stack-take-home-challenge.onrender.com`
+
+### Auth
+
+**Register**
+```bash
+curl -s -X POST https://full-stack-take-home-challenge.onrender.com/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "secret123"}'
+```
+
+**Login** — returns `access_token`
+```bash
+curl -s -X POST https://full-stack-take-home-challenge.onrender.com/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "secret123"}'
+```
+
+Store the token for subsequent requests:
+```bash
+TOKEN=$(curl -s -X POST https://full-stack-take-home-challenge.onrender.com/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "secret123"}' | jq -r '.access_token')
+```
+
+---
+
+### Notifications
+
+All notifications endpoints require the `Authorization: Bearer <token>` header.
+
+**Create — Email**
+```bash
+curl -s -X POST https://full-stack-take-home-challenge.onrender.com/v1/notifications \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "title": "Welcome",
+    "content": "Thanks for signing up!",
+    "channel": "email",
+    "payload": {
+      "recipient": "user@example.com",
+      "templateId": "welcome-v1"
+    }
+  }'
+```
+
+**Create — SMS**
+```bash
+curl -s -X POST https://full-stack-take-home-challenge.onrender.com/v1/notifications \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "title": "OTP",
+    "content": "Your verification code is 482910.",
+    "channel": "sms",
+    "payload": {
+      "phoneNumber": "+15550001234",
+      "content": "Your verification code is 482910."
+    }
+  }'
+```
+
+**Create — Push**
+```bash
+curl -s -X POST https://full-stack-take-home-challenge.onrender.com/v1/notifications \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "title": "New message",
+    "content": "You have a new message.",
+    "channel": "push",
+    "payload": {
+      "deviceToken": "abc123devicetoken",
+      "title": "New message",
+      "data": {"messageId": "42"}
+    }
+  }'
+```
+
+**List** (supports `?page=1&limit=10`)
+```bash
+curl -s "https://full-stack-take-home-challenge.onrender.com/v1/notifications?page=1&limit=10" \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+**Update**
+```bash
+curl -s -X PATCH https://full-stack-take-home-challenge.onrender.com/v1/notifications/<id> \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"title": "Updated title"}'
+```
+
+**Delete**
+```bash
+curl -s -X DELETE https://full-stack-take-home-challenge.onrender.com/v1/notifications/<id> \
+  -H "Authorization: Bearer $TOKEN"
+```
