@@ -64,6 +64,19 @@ This decouples the application logic from database-specific error codes (e.g. Po
 
 Argon2 was chosen over bcrypt because it is the more modern algorithm, winner of the Password Hashing Competition (2015), and has first-class TypeScript support. It is more resistant to GPU-based brute-force attacks than bcrypt.
 
+### Rate limiting via @nestjs/throttler
+
+Rate limiting is applied globally using `@nestjs/throttler` with the `ThrottlerGuard` registered as a global guard (`APP_GUARD`).
+
+Since the API is deployed on a public server, it is exposed to the internet and vulnerable to brute-force and abuse. The limits are intentionally strict because the server is only expected to handle manual testing traffic:
+
+| Scope | Limit |
+|---|---|
+| All endpoints | 20 requests / minute |
+| Auth endpoints (`/login`, `/register`) | 5 requests / minute |
+
+Auth endpoints have a tighter limit to prevent credential brute-forcing. Exceeding any limit returns `429 Too Many Requests`.
+
 ### Mock repositories for notification channels
 
 The Email, SMS, and Push sending implementations use mock repositories (simulated logic, no real external calls). Integrating actual providers (SendGrid, Twilio, Firebase, etc.) is outside the scope of this take-home challenge. The architecture is designed so that replacing a mock with a real implementation only requires swapping the injected repository.
