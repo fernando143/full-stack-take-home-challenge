@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
 import { DatabaseException, DatabaseErrorCode } from './database.exception';
 
@@ -10,9 +10,12 @@ enum PostgresErrorCode {
 
 @Injectable()
 export class DatabaseErrorHandler {
+  private readonly logger = new Logger(DatabaseErrorHandler.name);
+
   handleError(error: unknown): never {
     if (error instanceof QueryFailedError) {
       const code = (error.driverError as { code?: string })?.code;
+      this.logger.error(`QueryFailedError code=${code}: ${error.message}`);
 
       switch (code) {
         case PostgresErrorCode.UNIQUE_VIOLATION:
