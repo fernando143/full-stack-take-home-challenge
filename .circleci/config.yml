@@ -13,7 +13,7 @@ jobs:
           command: npm run test:cov
           name: Run tests
       - coveralls/upload:
-          path_to_lcov: ./coverage/lcov.info
+          coverage_file: ./coverage/lcov.info
       - run:
           command: npm run build
           name: Build app
