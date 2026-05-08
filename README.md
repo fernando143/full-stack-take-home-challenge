@@ -4,6 +4,9 @@
 
 A basic Notification Management system for authenticated users. Each user can manage and send notifications through different channels.
 
+## Status
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/fernando143/full-stack-take-home-challenge/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/fernando143/full-stack-take-home-challenge/tree/main)
+
 ### Functional requirements
 
 #### 1. User authentication

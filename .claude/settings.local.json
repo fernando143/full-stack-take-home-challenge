@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.nestjs.com)",
+      "Bash(curl *)",
+      "Bash(xargs grep *)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(npx jest *)",
+      "Bash(xxd)",
+      "WebFetch(domain:www.telerik.com)",
+      "WebFetch(domain:oneuptime.com)",
+      "Bash(grep -E \"\\\\.\\(ts|js|json|env|yml|yaml\\)$|src|dist|test\")",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)"
+    ]
+  }
+}
