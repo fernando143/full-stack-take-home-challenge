@@ -290,6 +290,15 @@ describe('NotificationService', () => {
         service.updateOne('n1', updateDto, mockUser),
       ).rejects.toThrow('DB error');
     });
+
+    it('propagates save errors after successful preload', async () => {
+      mockRepository.preload.mockResolvedValue({ id: 'n1', title: 'Updated' });
+      mockRepository.save.mockRejectedValue(new Error('save failed'));
+
+      await expect(
+        service.updateOne('n1', updateDto, mockUser),
+      ).rejects.toThrow('save failed');
+    });
   });
 
   describe('deleteOne', () => {

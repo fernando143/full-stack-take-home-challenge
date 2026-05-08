@@ -65,5 +65,20 @@ describe('ApiKeyGuard', () => {
       const context = createMockContext('');
       expect(() => guard.canActivate(context)).toThrow(UnauthorizedException);
     });
+
+    it('rejects any key when API_KEYS env var is not set', async () => {
+      mockConfigService.get.mockReturnValue(undefined);
+      const module = await Test.createTestingModule({
+        providers: [
+          ApiKeyGuard,
+          { provide: ConfigService, useValue: mockConfigService },
+        ],
+      }).compile();
+      const guardWithNoKeys = module.get<ApiKeyGuard>(ApiKeyGuard);
+
+      expect(() => guardWithNoKeys.canActivate(createMockContext('any-key'))).toThrow(
+        UnauthorizedException,
+      );
+    });
   });
 });
