@@ -10,8 +10,10 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run test
+          command: npm run test:cov
           name: Run tests
+      - coveralls/upload:
+          path_to_lcov: ./coverage/lcov.info
       - run:
           command: npm run build
           name: Build app
