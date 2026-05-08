@@ -10,6 +10,14 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+  ApiParam,
+} from '@nestjs/swagger';
 
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
@@ -18,10 +26,15 @@ import { JwtPayload } from 'src/auth/jwt-payload.interface';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { Notification } from './notification.entity';
 
+@ApiTags('notifications')
+@ApiBearerAuth()
 @Controller({ path: 'notifications', version: '1' })
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationService) {}
 
+  @ApiOperation({ summary: 'Create a notification' })
+  @ApiResponse({ status: 201, description: 'Notification created, returns its ID' })
+  @ApiResponse({ status: 400, description: 'Invalid payload' })
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async create(
@@ -31,6 +44,10 @@ export class NotificationsController {
     return this.notificationsService.createOne(createNotificationDto, user);
   }
 
+  @ApiOperation({ summary: 'Update a notification' })
+  @ApiParam({ name: 'id', description: 'Notification UUID' })
+  @ApiResponse({ status: 200, description: 'Notification updated' })
+  @ApiResponse({ status: 404, description: 'Notification not found' })
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -41,6 +58,10 @@ export class NotificationsController {
     await this.notificationsService.updateOne(id, updateDto, user);
   }
 
+  @ApiOperation({ summary: 'Delete a notification' })
+  @ApiParam({ name: 'id', description: 'Notification UUID' })
+  @ApiResponse({ status: 204, description: 'Notification deleted' })
+  @ApiResponse({ status: 404, description: 'Notification not found' })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async delete(
@@ -50,6 +71,10 @@ export class NotificationsController {
     await this.notificationsService.deleteOne(id, user);
   }
 
+  @ApiOperation({ summary: 'List notifications with pagination' })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiResponse({ status: 200, description: 'Paginated list of notifications' })
   @Get()
   async findAll(
     @Query('page') page = 1,

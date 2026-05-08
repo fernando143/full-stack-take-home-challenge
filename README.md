@@ -133,7 +133,16 @@ docker compose up -d
 | Service | URL |
 |---|---|
 | API | http://localhost:3000 |
+| Swagger UI | http://localhost:3000/docs |
 | PostgreSQL | localhost:5432 |
+
+### Swagger UI
+
+1. Open http://localhost:3000/docs
+2. Click the **Authorize** button (top right).
+3. Under **api-key**, enter a valid value.
+4. For protected endpoints, also enter your JWT token under **BearerAuth** (obtain it via `POST /v1/auth/login`).
+5. Close the dialog — all requests made from the UI will now include the required headers automatically.
 
 ### Useful commands
 

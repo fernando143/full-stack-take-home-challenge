@@ -1,5 +1,6 @@
 import { IsEnum, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 import { EmailDto } from './email.dto';
 import { SmsDto } from './sms.dto';
 import { PushDto } from './push.dto';
@@ -12,15 +13,26 @@ export enum NotificationChannel {
 }
 
 export class CreateNotificationDto {
+  @ApiProperty({ example: 'Welcome!' })
   @IsString()
   title: string;
 
+  @ApiProperty({ example: 'Thanks for joining us.' })
   @IsString()
   content: string;
 
+  @ApiProperty({ enum: NotificationChannel, example: NotificationChannel.EMAIL })
   @IsEnum(NotificationChannel)
   channel: NotificationChannel;
 
+  @ApiProperty({
+    description: 'Channel-specific payload (EmailDto | SmsDto | PushDto)',
+    oneOf: [
+      { $ref: '#/components/schemas/EmailDto' },
+      { $ref: '#/components/schemas/SmsDto' },
+      { $ref: '#/components/schemas/PushDto' },
+    ],
+  })
   @ValidateNested()
   @Type((opts) => {
     switch (opts?.object?.channel) {
