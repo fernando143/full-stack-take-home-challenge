@@ -12,7 +12,8 @@
       "WebFetch(domain:oneuptime.com)",
       "Bash(grep -E \"\\\\.\\(ts|js|json|env|yml|yaml\\)$|src|dist|test\")",
       "Bash(npm install *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
     ]
   }
 }
