@@ -6,7 +6,7 @@ A basic Notification Management system for authenticated users. Each user can ma
 
 ## Status
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/fernando143/full-stack-take-home-challenge/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/fernando143/full-stack-take-home-challenge/tree/main)
-[![Coverage Status](https://coveralls.io/repos/github/fernando143/full-stack-take-home-challenge/badge.svg?branch=main)](https://coveralls.io/github/fernando143/full-stack-take-home-challenge?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/fernando143/full-stack-take-home-challenge/badge.svg?branch=main)](https://coveralls.io/github/fernando143/full-stack-take-home-challenge?branch=main&kill_cache=1)
 ### Functional requirements
 
 #### 1. User authentication
